@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
-import { AdminContext } from '../Context/AdminContext';
-import { DoctorContext } from '../Context/DoctorContext'; // 1. Import DoctorContext
+import { AdminContext } from '../context/AdminContext';
+import { DoctorContext } from '../context/DoctorContext'; // 1. Import DoctorContext
 import axios from 'axios';
 import { toast } from 'react-toastify';
 

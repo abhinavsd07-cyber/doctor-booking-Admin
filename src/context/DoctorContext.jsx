@@ -1,4 +1,4 @@
-// doctor/src/Context/DoctorContext.jsx
+// doctor/src/context/DoctorContext.jsx
 import { createContext, useState } from "react";
 import axios from 'axios';
 import { toast } from 'react-toastify';

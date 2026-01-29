@@ -1,6 +1,6 @@
 // admin/src/pages/Admin/DoctorsList.jsx
 import React, { useContext, useEffect } from 'react';
-import { AdminContext } from '../../Context/AdminContext';
+import { AdminContext } from '../../context/AdminContext';
 
 const DoctorsList = () => {
   const { doctors, aToken, getAllDoctors, changeAvailability } = useContext(AdminContext);

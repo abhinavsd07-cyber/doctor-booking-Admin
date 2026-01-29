@@ -1,6 +1,6 @@
 // admin/src/pages/Admin/Dashboard.jsx
 import React, { useContext, useEffect } from "react";
-import { AdminContext } from "../../Context/AdminContext";
+import { AdminContext } from "../../context/AdminContext";
 import { assets } from "../../assets/assets";
 
 const Dashboard = () => {

@@ -5,9 +5,9 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
 
-import AdminContextProvider from "./Context/AdminContext.jsx";
-import DoctorContextProvider from "./Context/DoctorContext.jsx";
-import AppContextProvider from "./Context/AppContext.jsx";
+import AdminContextProvider from "./context/AdminContext.jsx";
+import DoctorContextProvider from "./context/DoctorContext.jsx";
+import AppContextProvider from "./context/AppContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
