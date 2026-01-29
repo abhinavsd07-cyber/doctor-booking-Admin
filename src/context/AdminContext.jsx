@@ -28,7 +28,7 @@ const AdminContextProvider = (props) => {
   };
 
   // 2. Change Doctor Availability
- // admin/src/context/AdminContext.jsx
+ // admin/src/Context/AdminContext.jsx
 const changeAvailability = async (docId) => {
     try {
         const { data } = await axios.post(backendUrl + '/api/admin/change-availability', { docId }, { headers: { aToken } });

@@ -1,6 +1,6 @@
 // admin/src/pages/Admin/AllAppointments.jsx
 import React, { useContext, useEffect } from "react";
-import { AdminContext } from "../../context/AdminContext";
+import { AdminContext } from "../../Context/AdminContext";
 import { assets } from "../../assets/assets";
 
 const AllAppointments = () => {

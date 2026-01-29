@@ -1,6 +1,6 @@
 // doctor/src/pages/Doctor/DoctorAppointments.jsx
 import React, { useContext, useEffect } from 'react';
-import { DoctorContext } from '../../context/DoctorContext';
+import { DoctorContext } from '../../Context/DoctorContext';
 import { assets } from '../../assets/assets';
 
 const DoctorAppointments = () => {

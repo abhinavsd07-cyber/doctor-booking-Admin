@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
-import { AdminContext } from '../context/AdminContext'
-import { DoctorContext } from '../context/DoctorContext' // 1. Import DoctorContext
+import { AdminContext } from '../Context/AdminContext'
+import { DoctorContext } from '../Context/DoctorContext' // 1. Import DoctorContext
 import { NavLink } from 'react-router-dom'
 import { assets } from '../assets/assets'
 

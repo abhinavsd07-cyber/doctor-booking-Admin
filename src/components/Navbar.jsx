@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { assets } from '../assets/assets'
-import { AdminContext } from '../context/AdminContext'
-import { DoctorContext } from '../context/DoctorContext' // 1. Import DoctorContext
+import { AdminContext } from '../Context/AdminContext'
+import { DoctorContext } from '../Context/DoctorContext' // 1. Import DoctorContext
 import { useNavigate } from 'react-router-dom'
 
 const Navbar = () => {

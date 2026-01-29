@@ -1,6 +1,6 @@
 // doctor/src/pages/Doctor/DoctorDashboard.jsx
 import React, { useContext, useEffect, useState } from 'react';
-import { DoctorContext } from '../../context/DoctorContext';
+import { DoctorContext } from '../../Context/DoctorContext';
 import { assets } from '../../assets/assets';
 import axios from 'axios';
 import { toast } from 'react-toastify';
