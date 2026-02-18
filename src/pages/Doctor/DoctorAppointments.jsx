@@ -19,88 +19,143 @@ const DoctorAppointments = () => {
   }, [dToken]);
 
   return (
-    <div className='m-5 w-full max-w-6xl'>
-      <div className='mb-5'>
-        <h1 className='text-2xl font-bold text-slate-900'>
-          Appointment <span className='text-blue-600'>Scheduler</span>
-        </h1>
-        <p className='text-xs font-semibold text-slate-400 uppercase tracking-widest mt-1'>
-          Full history and upcoming patient sessions
-        </p>
-      </div>
+  <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-6">
+    <div className="max-w-6xl mx-auto">
 
-      <div className='bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden'>
-        {/* Table Header */}
-        <div className='hidden sm:grid grid-cols-[0.5fr_2fr_1fr_1fr_3fr_1fr_1fr] gap-1 py-4 px-6 border-b bg-slate-50 font-bold text-slate-500 text-xs uppercase'>
-          <p>#</p>
-          <p>Patient</p>
-          <p>Payment</p>
-          <p>Age</p>
-          <p>Date & Time</p>
-          <p>Fees</p>
-          <p>Action</p>
+      {/* HEADER */}
+      <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-extrabold text-slate-800">
+            Appointment <span className="text-blue-600">Manager</span>
+          </h1>
+          <p className="text-sm text-slate-500 mt-1">
+            View, manage and track all patient sessions
+          </p>
         </div>
 
-        {/* List Items */}
+        <button
+          onClick={getAppointments}
+          className="px-6 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-300"
+        >
+          🔄 Refresh
+        </button>
+      </div>
+
+      {/* TABLE CARD */}
+      <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+
+        {/* TABLE HEADER */}
+        <div className="hidden md:grid grid-cols-7 gap-4 px-6 py-4 bg-slate-100 text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <span>#</span>
+          <span>Patient</span>
+          <span>Payment</span>
+          <span>Age</span>
+          <span>Date & Time</span>
+          <span>Fees</span>
+          <span className="text-right">Action</span>
+        </div>
+
+        {/* APPOINTMENTS */}
         {appointments.slice().reverse().map((item, index) => (
-          <div 
+          <div
             key={index}
-            className='flex flex-wrap justify-between sm:grid grid-cols-[0.5fr_2fr_1fr_1fr_3fr_1fr_1fr] items-center gap-1 py-4 px-6 border-b hover:bg-slate-50 transition-all'
+            className="grid md:grid-cols-7 gap-4 items-center px-6 py-5 border-b hover:bg-blue-50 transition-all duration-300"
           >
-            <p className='max-sm:hidden text-slate-500'>{index + 1}</p>
-            
-            <div className='flex items-center gap-2'>
-              <img className='w-8 h-8 rounded-full object-cover' src={item.userData.image} alt="" />
-              <p className='font-medium text-slate-800'>{item.userData.name}</p>
+            <span className="hidden md:block text-slate-500">
+              {index + 1}
+            </span>
+
+          {/* PATIENT */}
+<div className="flex items-center gap-3">
+  <img
+    src={item.userData.image}
+    className="w-10 h-10 rounded-full object-cover ring-2 ring-blue-100 flex-shrink-0"
+    alt=""
+  />
+
+  <div>
+    <p className="font-semibold text-slate-800 whitespace-nowrap">
+      {item.userData.name}
+    </p>
+    <p className="text-xs text-slate-500">
+      #{item._id.slice(-6).toUpperCase()}
+    </p>
+  </div>
+</div>
+
+
+            {/* PAYMENT */}
+            <div>
+              <span
+                className={`px-3 py-1 text-xs font-semibold rounded-full ${
+                  item.payment
+                    ? "bg-green-100 text-green-600"
+                    : "bg-orange-100 text-orange-600"
+                }`}
+              >
+                {item.payment ? "ONLINE" : "CASH"}
+              </span>
             </div>
 
+            {/* AGE */}
+            <span className="hidden md:block text-slate-600">
+              {item.userData.dob
+                ? new Date().getFullYear() -
+                  item.userData.dob.split("-")[0]
+                : "—"}
+            </span>
+
+            {/* DATE */}
             <div>
-              <p className={`text-[10px] inline-block px-2 py-0.5 rounded-full border ${item.payment ? 'bg-green-50 text-green-600 border-green-100' : 'bg-orange-50 text-orange-600 border-orange-100'}`}>
-                {item.payment ? 'ONLINE' : 'CASH'}
+              <p className="font-semibold text-slate-800">
+                {slotDateFormat(item.slotDate)}
+              </p>
+              <p className="text-xs text-blue-600 font-medium">
+                {item.slotTime}
               </p>
             </div>
 
-            <p className='max-sm:hidden text-slate-600'>
-               {item.userData.dob ? (new Date().getFullYear() - item.userData.dob.split('-')[0]) : '—'}
-            </p>
+            {/* FEES */}
+            <span className="font-bold text-slate-900">
+              ${item.amount}
+            </span>
 
-            <div className='text-xs'>
-              <p className='font-semibold text-slate-800'>{slotDateFormat(item.slotDate)}</p>
-              <p className='text-blue-500 font-bold'>{item.slotTime}</p>
-            </div>
-
-            <p className='font-bold text-slate-900'>${item.amount}</p>
-
-            {/* ACTION BUTTONS: FIXED VISIBILITY */}
-            <div className='flex items-center gap-2'>
+            {/* ACTION */}
+            <div className="flex justify-end gap-3">
               {item.cancelled ? (
-                <p className='text-red-400 text-xs font-bold uppercase'>Cancelled</p>
+                <span className="text-red-500 text-sm font-semibold">
+                  Cancelled
+                </span>
               ) : item.isCompleted ? (
-                <p className='text-green-500 text-xs font-bold uppercase'>Completed</p>
+                <span className="text-green-600 text-sm font-semibold">
+                  Completed
+                </span>
               ) : (
-                <div className='flex gap-2'>
-                  {/* Tick/Complete Button */}
-                  <img 
-                    onClick={() => completeAppointment(item._id)} 
-                    className='w-8 h-8 cursor-pointer hover:scale-110 transition-all p-1.5 bg-green-50 rounded-full border border-green-100' 
-                    src={assets.tick_icon} 
-                    alt="Complete" 
-                  />
-                  {/* Cross/Cancel Button */}
-                  <img 
-                    onClick={() => cancelAppointment(item._id)} 
-                    className='w-8 h-8 cursor-pointer hover:scale-110 transition-all p-1.5 bg-red-50 rounded-full border border-red-100' 
-                    src={assets.cancel_icon} 
-                    alt="Cancel" 
-                  />
-                </div>
+                <>
+                  <button
+                    onClick={() => completeAppointment(item._id)}
+                    className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+                  >
+                    ✅ Complete
+                  </button>
+
+                  <button
+                    onClick={() => cancelAppointment(item._id)}
+                    className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+                  >
+                    ❌ Cancel
+                  </button>
+                </>
               )}
             </div>
           </div>
         ))}
+
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default DoctorAppointments;
