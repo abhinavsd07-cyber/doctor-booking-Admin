@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import { AdminContext } from "./context/AdminContext";
-import { DoctorContext } from "./context/DoctorContext"; // Import DoctorContext
+import { DoctorContext } from "./context/DoctorContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -14,25 +14,25 @@ import AllAppointments from "./pages/Admin/AllAppointments";
 import AddDoctor from "./pages/Admin/AddDoctor";
 import DoctorsList from "./pages/Admin/DoctorsList";
 
-// Doctor Pages (Make sure these paths match your folder structure)
+// Doctor Pages
 import DoctorDashboard from "./pages/Doctor/DoctorDashboard";
 import DoctorAppointments from "./pages/Doctor/DoctorAppointments";
 import DoctorProfile from "./pages/Doctor/DoctorProfile";
 
 function App() {
   const { aToken } = useContext(AdminContext);
-  const { dToken } = useContext(DoctorContext); // Get dToken
+  const { dToken } = useContext(DoctorContext);
 
   return (
     <div className="min-h-screen bg-[#F8F9FD]">
-      <ToastContainer />
+      {/* 🟢 MOVED OUTSIDE: This ensures toasts always work regardless of login state */}
+      <ToastContainer position="top-right" autoClose={3000} />
       
-      {/* 1. Check if EITHER Admin or Doctor is logged in */}
-      {(aToken || dToken) ? (
+      { (aToken || dToken) ? (
         <>
           <Navbar />
           <div className="flex items-start">
-            <Sidebar /> {/* Sidebar handles logic to show different icons internally */}
+            <Sidebar />
             <main className="flex-1 overflow-y-auto">
               <Routes>
                 {/* Admin Routes */}
@@ -60,7 +60,6 @@ function App() {
           </div>
         </>
       ) : (
-        /* 2. If no token, show login page */
         <Login />
       )}
     </div>
