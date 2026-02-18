@@ -17,103 +17,139 @@ const AllAppointments = () => {
     }
   }, [aToken]);
 
-  return (
-    <div className="m-6 font-sans">
-      
-      {/* --- Section Header --- */}
-      <div className="flex justify-between items-end mb-8">
+ return (
+  <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-8 font-sans">
+    <div className="max-w-7xl mx-auto">
+
+      {/* HEADER */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Booking <span className="text-blue-600">Ledger</span></h1>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mt-1">Live Appointment Stream</p>
+          <h1 className="text-3xl font-extrabold text-slate-800 tracking-tight">
+            Appointment <span className="text-blue-600">Overview</span>
+          </h1>
+          <p className="text-sm text-slate-500 mt-2">
+            Manage all patient bookings across the platform
+          </p>
         </div>
-        <div className="bg-blue-50 border border-blue-100 px-5 py-2 rounded-full">
-           <p className="text-blue-600 text-xs font-black uppercase tracking-widest">
-            Total Sessions: {appointments.length}
+
+        <div className="bg-white shadow-lg rounded-2xl px-6 py-4 border border-slate-100">
+          <p className="text-xs uppercase tracking-widest text-slate-400 font-semibold">
+            Total Appointments
+          </p>
+          <p className="text-2xl font-bold text-blue-600">
+            {appointments.length}
           </p>
         </div>
       </div>
 
-      {/* --- Main Table Container --- */}
-      <div className="bg-white border border-slate-100 rounded-[2rem] shadow-sm overflow-hidden">
-        
-        {/* Scrollable Area */}
-        <div className="max-h-[75vh] overflow-y-auto no-scrollbar">
-          
-          {/* Table Header - Sticky */}
-          <div className="hidden sm:grid grid-cols-[0.5fr_2.5fr_1fr_2.5fr_2.5fr_1fr_1fr] items-center py-5 px-8 border-b bg-slate-50/50 sticky top-0 backdrop-blur-md z-10">
-            {['#', 'Patient', 'Age', 'Schedule', 'Doctor', 'Fee', 'Action'].map((head) => (
-              <p key={head} className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{head}</p>
-            ))}
-          </div>
+      {/* TABLE CONTAINER */}
+      <div className="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
 
-          {/* Empty State */}
-          {appointments.length === 0 ? (
-            <div className="py-20 text-center">
-              <p className="text-slate-300 font-bold uppercase tracking-widest text-xs">No Records Found</p>
-            </div>
-          ) : (
-            <div className="divide-y divide-slate-50">
-              {appointments.map((item, index) => (
-                <div
-                  className="grid grid-cols-1 sm:grid-cols-[0.5fr_2.5fr_1fr_2.5fr_2.5fr_1fr_1fr] items-center py-5 px-8 hover:bg-slate-50/50 transition-colors group"
-                  key={index}
-                >
-                  <p className="text-slate-400 font-bold text-xs max-sm:hidden">{index + 1}</p>
-
-                  {/* Patient Info */}
-                  <div className="flex items-center gap-3">
-                    <img className="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover" src={item.userData.image} alt="" />
-                    <p className="text-slate-900 font-bold text-sm tracking-tight">{item.userData.name}</p>
-                  </div>
-
-                  {/* Age */}
-                  <p className="text-slate-500 font-medium text-sm">
-                    {item.userData.dob ? (new Date().getFullYear() - item.userData.dob.split("-")[0]) : "—"}
-                  </p>
-
-                  {/* Schedule */}
-                  <div>
-                    <p className="text-slate-900 font-bold text-xs">{slotDateFormat(item.slotDate)}</p>
-                    <p className="text-blue-600 font-bold text-[10px] uppercase tracking-widest mt-0.5">{item.slotTime}</p>
-                  </div>
-
-                  {/* Doctor Info */}
-                  <div className="flex items-center gap-3">
-                    <img className="w-8 h-8 rounded-full bg-slate-100 object-cover" src={item.docData.image} alt="" />
-                    <p className="text-slate-600 font-semibold text-xs">{item.docData.name}</p>
-                  </div>
-
-                  {/* Fee */}
-                  <p className="text-slate-900 font-black text-sm">${item.amount}</p>
-
-                  {/* Actions */}
-                  <div className="flex justify-end sm:justify-center">
-                    {item.cancelled ? (
-                      <span className="px-3 py-1 bg-rose-50 text-rose-500 text-[9px] font-black uppercase tracking-widest rounded-full border border-rose-100">Cancelled</span>
-                    ) : item.isCompleted ? (
-                      <span className="px-3 py-1 bg-emerald-50 text-emerald-500 text-[9px] font-black uppercase tracking-widest rounded-full border border-emerald-100">Settled</span>
-                    ) : (
-                      <button 
-                        onClick={() => cancelAppointment(item._id)}
-                        className="p-2.5 hover:bg-rose-50 rounded-xl transition-all group/btn"
-                        title="Cancel Appointment"
-                      >
-                        <img 
-                          className="w-5 grayscale group-hover/btn:grayscale-0 opacity-40 group-hover/btn:opacity-100 transition-all" 
-                          src={assets.cancel_icon} 
-                          alt="Cancel" 
-                        />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+        {/* TABLE HEADER */}
+        <div className="hidden md:grid grid-cols-[0.5fr_2.5fr_1fr_2fr_2.5fr_1fr_1.5fr] px-8 py-5 bg-slate-100 text-xs font-semibold uppercase tracking-wider text-slate-500">
+          <span>#</span>
+          <span>Patient</span>
+          <span>Age</span>
+          <span>Schedule</span>
+          <span>Doctor</span>
+          <span>Fee</span>
+          <span className="text-right">Status</span>
         </div>
+
+        {appointments.length === 0 ? (
+          <div className="py-24 text-center text-slate-400 font-semibold">
+            No appointments available
+          </div>
+        ) : (
+          appointments.map((item, index) => (
+            <div
+              key={index}
+              className="grid md:grid-cols-[0.5fr_2.5fr_1fr_2fr_2.5fr_1fr_1.5fr] items-center px-8 py-6 border-t hover:bg-blue-50 transition-all duration-300"
+            >
+              {/* INDEX */}
+              <span className="hidden md:block text-slate-400 font-medium">
+                {index + 1}
+              </span>
+
+              {/* PATIENT */}
+              <div className="flex items-center gap-4">
+                <img
+                  src={item.userData.image}
+                  className="w-11 h-11 rounded-full object-cover ring-2 ring-blue-100"
+                  alt=""
+                />
+                <div>
+                  <p className="font-semibold text-slate-800 whitespace-nowrap">
+                    {item.userData.name}
+                  </p>
+                  <p className="text-xs text-slate-500">
+                    ID: #{item._id.slice(-6).toUpperCase()}
+                  </p>
+                </div>
+              </div>
+
+              {/* AGE */}
+              <span className="text-slate-600">
+                {item.userData.dob
+                  ? new Date().getFullYear() -
+                    item.userData.dob.split("-")[0]
+                  : "—"}
+              </span>
+
+              {/* DATE */}
+              <div>
+                <p className="font-semibold text-slate-800">
+                  {slotDateFormat(item.slotDate)}
+                </p>
+                <p className="text-xs text-blue-600 font-medium">
+                  {item.slotTime}
+                </p>
+              </div>
+
+              {/* DOCTOR */}
+              <div className="flex items-center gap-3">
+                <img
+                  src={item.docData.image}
+                  className="w-9 h-9 rounded-full object-cover bg-slate-100"
+                  alt=""
+                />
+                <p className="text-slate-700 font-medium whitespace-nowrap">
+                  {item.docData.name}
+                </p>
+              </div>
+
+              {/* FEE */}
+              <span className="font-bold text-slate-900">
+                ${item.amount}
+              </span>
+
+              {/* STATUS / ACTION */}
+              <div className="flex justify-end">
+                {item.cancelled ? (
+                  <span className="px-4 py-1 text-xs font-semibold bg-red-100 text-red-600 rounded-full">
+                    Cancelled
+                  </span>
+                ) : item.isCompleted ? (
+                  <span className="px-4 py-1 text-xs font-semibold bg-green-100 text-green-600 rounded-full">
+                    Completed
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => cancelAppointment(item._id)}
+                    className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
-  );
+  </div>
+);
+
 };
 
 export default AllAppointments;
