@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { AdminContext } from "./context/AdminContext";
 import { DoctorContext } from "./context/DoctorContext";
 import { ToastContainer } from "react-toastify";
@@ -9,6 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import Login from "./pages/Login";
+
+// Admin Pages
 import Dashboard from "./pages/Admin/Dashboard";
 import AllAppointments from "./pages/Admin/AllAppointments";
 import AddDoctor from "./pages/Admin/AddDoctor";
@@ -25,20 +27,19 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#F8F9FD]">
-      {/* 🟢 MOVED OUTSIDE: This ensures toasts always work regardless of login state */}
-      <ToastContainer position="top-right" autoClose={3000} />
+      <ToastContainer position="top-right" autoClose={3000} theme="colored" />
       
       { (aToken || dToken) ? (
-        <>
+        <div className="flex flex-col h-screen">
           <Navbar />
-          <div className="flex items-start">
+          <div className="flex flex-1 overflow-hidden">
             <Sidebar />
-            <main className="flex-1 overflow-y-auto">
+            <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#F8F9FD]">
               <Routes>
-                {/* Admin Routes */}
+                {/* --- ADMIN AUTHENTICATED ROUTES --- */}
                 {aToken && (
                   <>
-                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/" element={<Navigate to="/admin-dashboard" />} />
                     <Route path="/admin-dashboard" element={<Dashboard />} />
                     <Route path="/all-appointments" element={<AllAppointments />} />
                     <Route path="/add-doctor" element={<AddDoctor />} />
@@ -46,21 +47,26 @@ function App() {
                   </>
                 )}
 
-                {/* Doctor Routes */}
+                {/* --- DOCTOR AUTHENTICATED ROUTES --- */}
                 {dToken && (
                   <>
-                    <Route path="/" element={<DoctorDashboard />} />
+                    <Route path="/" element={<Navigate to="/doctor-dashboard" />} />
                     <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
                     <Route path="/doctor-appointments" element={<DoctorAppointments />} />
                     <Route path="/doctor-profile" element={<DoctorProfile />} />
                   </>
                 )}
+
+                {/* --- CATCH-ALL REDIRECT --- */}
+                <Route path="*" element={<Navigate to="/" />} />
               </Routes>
             </main>
           </div>
-        </>
+        </div>
       ) : (
-        <Login />
+        <Routes>
+          <Route path="*" element={<Login />} />
+        </Routes>
       )}
     </div>
   );

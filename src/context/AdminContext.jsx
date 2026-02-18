@@ -1,4 +1,4 @@
-import React, { useState, createContext } from 'react';
+import React, { useState, createContext, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -8,58 +8,61 @@ const AdminContextProvider = (props) => {
   const [aToken, setAToken] = useState(localStorage.getItem('aToken') || '');
   const [doctors, setDoctors] = useState([]);
   const [appointments, setAppointments] = useState([]);
-  const [dashData, setDashData] = useState(false);
+  const [dashData, setDashData] = useState(null); // Changed false to null for better logical checking
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
+  // Professional Header Configuration
+  const authHeader = { headers: { atoken: aToken } };
 
   // 1. Fetch All Doctors
   const getAllDoctors = async () => {
     try {
-      // Updated header key to lowercase 'atoken'
-      const { data } = await axios.post(backendUrl + '/api/admin/all-doctors', {}, { headers: { atoken: aToken } });
+      const { data } = await axios.post(`${backendUrl}/api/admin/all-doctors`, {}, authHeader);
       if (data.success) {
         setDoctors(data.doctors);
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error?.response?.data?.message || error.message);
     }
   };
 
   // 2. Change Doctor Availability
- // admin/src/context/AdminContext.jsx
-const changeAvailability = async (docId) => {
+  const changeAvailability = async (docId) => {
     try {
-        const { data } = await axios.post(backendUrl + '/api/admin/change-availability', { docId }, { headers: { aToken } });
-        if (data.success) {
-            toast.success(data.message);
-            getAllDoctors(); // Refresh the list to show the new status
-        } else {
-            toast.error(data.message);
-        }
-    } catch (error) {
-        toast.error(error.message);
-    }
-};
-  // 3. Fetch All Appointments
-  const getAllAppointments = async () => {
-    try {
-      const { data } = await axios.get(backendUrl + '/api/admin/appointments', { headers: { atoken: aToken } });
+      // FIX: Changed 'aToken' to 'atoken' to match other requests
+      const { data } = await axios.post(`${backendUrl}/api/admin/change-availability`, { docId }, authHeader);
       if (data.success) {
-        setAppointments(data.appointments);
+        toast.success(data.message);
+        getAllDoctors(); 
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error?.response?.data?.message || error.message);
+    }
+  };
+
+  // 3. Fetch All Appointments
+  const getAllAppointments = async () => {
+    try {
+      const { data } = await axios.get(`${backendUrl}/api/admin/appointments`, authHeader);
+      if (data.success) {
+        setAppointments(data.appointments.reverse()); // Reverse to show latest first
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || error.message);
     }
   };
 
   // 4. Cancel Appointment
   const cancelAppointment = async (appointmentId) => {
     try {
-      const { data } = await axios.post(backendUrl + '/api/admin/cancel-appointment', { appointmentId }, { headers: { atoken: aToken } });
+      const { data } = await axios.post(`${backendUrl}/api/admin/cancel-appointment`, { appointmentId }, authHeader);
       if (data.success) {
         toast.success(data.message);
         getAllAppointments(); 
@@ -68,21 +71,21 @@ const changeAvailability = async (docId) => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error?.response?.data?.message || error.message);
     }
   };
 
   // 5. Get Dashboard Statistics
   const getDashData = async () => {
     try {
-      const { data } = await axios.get(backendUrl + '/api/admin/dashboard', { headers: { atoken: aToken } });
+      const { data } = await axios.get(`${backendUrl}/api/admin/dashboard`, authHeader);
       if (data.success) {
         setDashData(data.dashData);
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(error?.response?.data?.message || error.message);
     }
   };
 
